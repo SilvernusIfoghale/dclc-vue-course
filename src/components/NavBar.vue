@@ -13,8 +13,10 @@ import logo from "@/assets/logo.svg";
       <li>
         <a href="/" class="hover:bg-green-900 p-1.5 duration-500 bg-green-900 rounded-sm">Home</a>
       </li>
-      <li><a href="/" class="hover:bg-green-900 p-1.5 duration-500 rounded-sm">Jobs</a></li>
-      <li><a href="/" class="hover:bg-green-900 p-1.5 duration-500 rounded-sm">Add Job</a></li>
+      <li><a href="/jobs" class="hover:bg-green-900 p-1.5 duration-500 rounded-sm">Jobs</a></li>
+      <li>
+        <a href="/jobs/add" class="hover:bg-green-900 p-1.5 duration-500 rounded-sm">Add Job</a>
+      </li>
     </ul>
   </nav>
 </template>
