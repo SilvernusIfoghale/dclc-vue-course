@@ -1,4 +1,5 @@
 <script setup>
+import BackButton from "@/components/BackButton.vue";
 import axios from "axios";
 import { defineProps, onMounted, reactive } from "vue";
 import { RouterLink, useRoute } from "vue-router";
@@ -33,6 +34,7 @@ onMounted(async () => {
 });
 </script>
 <template>
+  <BackButton />
   <section v-if="!state.isLoading" class="bg-green-50">
     <div class="m-auto py-10 px-6">
       <div class="grid grid-cols-1 lg:grid-cols-4 w-full gap-6">
