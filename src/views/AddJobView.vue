@@ -37,7 +37,7 @@ const handleSubmit = async () => {
   try {
     const response = await axios.post("/api/jobs", newJob);
     //show toast
-    toast.success("Job Added Successfully");
+    toast.success("Job Added Successfully", { autoClose: 10000 });
     router.push(`/jobs/${response.data.id}`);
   } catch (error) {
     console.log("Error posting job", error);
