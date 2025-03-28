@@ -1,8 +1,14 @@
 <script setup>
 import axios from "axios";
-import { reactive } from "vue";
-import { useRouter } from "vue-router";
+import { reactive, onMounted } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
+
+const toast = useToast();
+const route = useRoute();
+const router = useRouter();
+
+const jobId = route.params.id;
 
 const form = reactive({
   type: "Full-Time",
@@ -18,12 +24,13 @@ const form = reactive({
   },
 });
 
-const router = useRouter();
-
-const toast = useToast();
+const state = reactive({
+  job: [],
+  isLoading: true,
+});
 
 const handleSubmit = async () => {
-  const newJob = {
+  const updateJob = {
     type: form.type,
     title: form.title,
     description: form.description,
@@ -37,22 +44,42 @@ const handleSubmit = async () => {
     },
   };
   try {
-    const response = await axios.post("/api/jobs", newJob);
+    const response = await axios.put(`/api/jobs/${jobId}`, updateJob);
     //show toast
-    toast.success("Job Added Successfully", { autoClose: 10000 });
+    toast.success("Job Updated Successfully");
     router.push(`/jobs/${response.data.id}`);
   } catch (error) {
-    console.log("Error posting job", error);
+    console.log("Error updating job", error);
     toast.error("Something Went Wrong");
   }
 };
+
+onMounted(async () => {
+  try {
+    const response = await axios.get(`/api/jobs/${jobId}`);
+    state.job = response.data;
+    form.type = state.job.type;
+    form.title = state.job.title;
+    form.description = state.job.description;
+    form.salary = state.job.salary;
+    form.location = state.job.location;
+    form.company.name = state.job.company.name;
+    form.company.description = state.job.company.description;
+    form.company.contactEmail = state.job.company.contactEmail;
+    form.company.contactPhone = state.job.company.contactPhone;
+  } catch (error) {
+    console.log("Something went wrong", error);
+  } finally {
+    state.isLoading = false;
+  }
+});
 </script>
 <template>
   <section class="bg-green-50">
     <div class="container m-auto max-w-2xl py-24">
       <div class="bg-white px-6 py-8 mb-4 shadow-md rounded-md border m-4 md:m-0">
         <form @submit.prevent="handleSubmit">
-          <h2 class="text-3xl text-center font-semibold mb-6">Add Job</h2>
+          <h2 class="text-3xl text-center font-semibold mb-6">Edit Job</h2>
 
           <div class="mb-4">
             <label for="type" class="block text-gray-700 font-bold mb-2">Job Type</label>
@@ -191,7 +218,7 @@ const handleSubmit = async () => {
               class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline"
               type="submit"
             >
-              Add Job
+              Update Job
             </button>
           </div>
         </form>
